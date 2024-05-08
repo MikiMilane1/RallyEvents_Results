@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Drivers
+{% endblock %}
+
+{% block header %}
+{% include "header.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="container py-2">
+    <div class="row col-xxl-12">
+
+        <h3>Drivers</h3>
+
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col" class="col-1">Driver ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Date of birth</th>
+                <th scope="col">Country</th>
+            </tr>
+            </thead>
+            {% for driver in all_drivers %}
+            <tr>
+                <td>{{ driver.id }}</td>
+                <td>
+                    <a href="{{ url_for('driver', driver_id=driver.id) }}">{{ driver.last_name }}, {{ driver.first_name }}</a>
+                </td>
+                <td>{{ driver.birth_date }}</td>
+                <td>{{ driver.country }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div>
+        <button class="btn custom_button">
+            <a href="{{ url_for('add_new_driver') }}">Add new driver to DB</a>
+        </button>
+    </div>
+    {% endblock %}
+

@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Home
+{% endblock %}
+
+{% block header %}
+{% include "header.html" %}
+{% endblock %}
+
+{% block content %}
+{% if showcase_events == [] %}
+No events
+{% else %}
+<div class="album py-5 bg-body-tertiary">
+    <div class="container">
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            <div class="col">
+                <div class="card shadow-sm">
+                    <title>Placeholder</title><img src="../static/assets/img/example_img1.jpg" height="235.95"/>
+                    <div class="card-body">
+                        <p class="card-text"><a href="{{ url_for('event', event_id=showcase_events[0].id) }}">{{
+                            showcase_events[0].name }}</a></p>
+                        <div class="d-flex justify-content-between align-items-center">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card shadow-sm">
+                    <title>Placeholder</title><img src="../static/assets/img/example_img2.jpeg" height="235.95"/>
+                    <div class="card-body">
+                        <p class="card-text"><a href="{{ url_for('event', event_id=showcase_events[1].id) }}">{{
+                            showcase_events[1].name }}</a></p>
+                        <div class="d-flex justify-content-between align-items-center">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card shadow-sm">
+                    <title>Placeholder</title><img src="../static/assets/img/example_img3.jpg" height="235.95"/>
+                    <div class="card-body">
+                        <p class="card-text"><a href="{{ url_for('event', event_id=showcase_events[2].id) }}">{{
+                            showcase_events[2].name }}</a></p>
+                        <div class="d-flex justify-content-between align-items-center">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

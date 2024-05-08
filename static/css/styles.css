@@ -1,0 +1,26 @@
+
+.btn-primary {
+--bs-btn-bg: rgb(33 37 41);
+text-decoration: none;
+}
+
+.custom_button {
+--bs-btn-bg: rgb(33 37 41);
+--bs-btn-color: #fff;
+text-decoration: none;
+}
+
+.button {
+  text-decoration: none;
+}
+
+#custom_button {
+}
+
+a:hover {
+ text-decoration: none;
+}
+
+a {
+    color: r#fff));
+    text-decoration: none;

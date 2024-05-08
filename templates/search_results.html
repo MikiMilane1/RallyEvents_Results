@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Search results
+{% endblock %}
+
+{% block header %}
+{% include "header.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="py-3">
+        <h4>Events:</h4>
+        {% if results_events == [] %}
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item text-danger">No results</li>
+        </ul>
+        {% else %}
+        <ul class="list-group list-group-flush">
+            {% for item in results_events %}
+            <li class="list-group-item">{{ item }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+    <div class="py-3">
+        <h4>Drivers:</h4>
+        {% if results_drivers == [] %}
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item text-danger">No results</li>
+        </ul>
+        {% else %}
+        <ul class="list-group list-group-flush">
+            {% for item in results_drivers %}
+            <li class="list-group-item"><a href="{{ url_for('driver', driver_id=item.id) }}">{{ item.last_name }}, {{ item.first_name }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

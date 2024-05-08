@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% from "bootstrap5/form.html" import render_form %}
+
+{% block title %}
+Event: {{ event.name }}
+{% endblock %}
+
+{% block header %}
+{% include "header.html" %}
+{% endblock %}
+
+{% block content %}
+<table class="table">
+    <tr>
+        <th scope="col">Event name</th>
+        {% if event.series_instance == None %}
+        <th scope="col">{{ event.name }} {{ event.year }}</th>
+        {% else %}
+        <th scope="col">{{ event.series_instance }}. {{ event.name }} {{ event.year }}</th>
+        {% endif %}
+    </tr>
+    <tr>
+        <td scope="col">Date from</td>
+        <td scope="col">{{ event.date_from }}</td>
+    </tr>
+    <tr>
+        <td scope="col">Date to</td>
+        <td scope="col">{{ event.date_to }}</td>
+    </tr>
+    <tr>
+        <td scope="col">Location</td>
+        <td scope="col">{{ event.location }}, {{ event.country }}</td>
+    </tr>
+    <tr>
+        <td scope="col">Distance</td>
+        <td scope="col">{{ event.distance }} km</td>
+    </tr>
+    <tr>
+        <td scope="col">Surface</td>
+        <td scope="col">{{ event.surface }}</td>
+    </tr>
+</table>
+
+<div class="py-4 col-xxl-4">
+    {% if event.drivers == [] %}
+    <div class="p-3" style="color: red">No drivers registered</div>
+    {% else %}
+<table class="table">
+    <tr>
+        <th scope="col">Registered drivers</th>
+        <th scope="col" class="col-2 align-middle">Remove driver</th>
+    </tr>
+    {% for driver in event.drivers %}
+    <tr>
+        <td scope="col"><a href="{{ url_for('driver', driver_id=driver.id) }}">{{ driver.last_name }}, {{ driver.first_name }}</a></td>
+        <td scope="col" class="align-baseline"><a href="{{ url_for('remove_driver_from_event', event_id=event.id, driver_id=driver.id) }}" style="color: red">X</a></td>
+    </tr>
+    {% endfor %}
+</table>
+    {% endif %}
+
+<div class="col-sm-12 col-md-12 col-xl-6 col-xxl-6 p-3">
+{{ render_form(form, novalidate=True) }}
+</div>
+{% endblock %}
+

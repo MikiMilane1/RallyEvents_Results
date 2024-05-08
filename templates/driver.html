@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% from "bootstrap5/form.html" import render_form %}
+
+{% block title %}
+Driver: {{ driver.driver_name }}
+{% endblock %}
+
+{% block header %}
+{% include "header.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="'container ">
+    <div class="driver_info p-5 ">
+        <div class="border-bottom">
+            <p>First name:</p>
+            <p style="font-size: 20px; font-weight: bold">{{ driver.first_name }}</p>
+
+            <p>Last name:</p>
+            <p style="font-size: 20px; font-weight: bold">{{ driver.last_name }}</p>
+        </div>
+        <div class="py-5 col-xxl-4">
+            <table class="table col-xxl-4">
+                <tr>
+                    <td>Country</td>
+                    <td style="font-weight: bold">{{ driver.country }}</td>
+                </tr>
+                <tr>
+                    <td>Date of birth:</td>
+                    <td style="font-weight: bold">{{ driver.birth_date }}</td>
+                </tr>
+            </table>
+
+        </div>
+    </div>
+</div>
+<div class="row driver_events px-3">
+    <table class="table col-xxl-10">
+        <tr>
+            <th scope="col">Registered for:</th>
+        </tr>
+        {% for event in driver.events %}
+        <tr>
+            <td scope="col"><a href="{{ url_for('event', event_id=event.id) }}">{{ event.name }}</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% from "bootstrap5/form.html" import render_form %}
+
+<header class="p-3 bg-dark text-white">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap">
+                    <use xlink:href="#bootstrap"></use>
+                </svg>
+            </a>
+
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                <li><a href="{{ url_for('index') }}" class="nav-link px-2 text-secondary">Home</a></li>
+                <li><a href="{{ url_for('all_events') }}" class="nav-link px-2 text-white">Events</a></li>
+                <li><a href="{{ url_for('all_drivers') }}" class="nav-link px-2 text-white">Drivers</a></li>
+            </ul>
+
+            <form class="col-12 col-lg-auto col-xxl-3 mb-3 mb-lg-0 me-lg-3" method="POST" action="{{ url_for('search') }}">
+                <input type="search" class="form-control form-control-dark" placeholder="Search for event or driver" aria-label="Search" name="searched">
+            </form>
+
+            <div class="text-end">
+                <button type="button" class="btn btn-outline-light me-2">Login</button>
+            </div>
+        </div>
+    </div>
+</header>
