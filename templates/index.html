@@ -9,7 +9,7 @@ Home
 {% endblock %}
 
 {% block content %}
-{% if showcase_events == [] %}
+{% if showcase_events|length < 3 %}
 No events
 {% else %}
 <div class="album py-5 bg-body-tertiary">

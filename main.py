@@ -2,16 +2,17 @@ from __future__ import annotations
 from typing import List
 from dotenv import load_dotenv
 import os
+import logging
 
 import sqlalchemy.exc
 from flask import Flask, render_template, request, redirect, url_for
-from forms import NewDriverForm, NewEventForm, RegisterDriverForm, SearchForm
+from forms import NewDriverForm, NewEventForm, RegisterDriverForm, SearchForm, EditResultForm, TelephoneForm, ContactForm
 from wtforms import Label
 from flask_bootstrap import Bootstrap5
 
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship, DeclarativeBase, Mapped, mapped_column
-from sqlalchemy import Integer, String, Text, ForeignKey, Float, Date, Table, Column, select
+from sqlalchemy import Integer, String, Text, ForeignKey, Float, Date, Table, Column, select, Time
 
 from country_list import countries_for_language
 
@@ -39,7 +40,7 @@ class Base(DeclarativeBase):
     pass
 
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///event_and_driver.sqlite"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///event_driver_result.sqlite"
 db = SQLAlchemy(model_class=Base)
 db.init_app(app)
 
@@ -70,8 +71,10 @@ class Event(db.Model):
     surface: Mapped[str] = mapped_column(String(250), nullable=False)
     distance: Mapped[float] = mapped_column(Float, nullable=True)
 
-    # LINK EVENT WITH DRIVERS
+    # ASSOCIATE EVENT WITH DRIVERS
     drivers: Mapped[List[Driver]] = relationship(secondary=association_table, back_populates="events")
+    # ASSOCIATE EVENT WITH RESULTS
+    results = relationship("Result", back_populates="event")
 
 
 # DRIVER TABLE
@@ -83,11 +86,30 @@ class Driver(db.Model):
     birth_date: Mapped[str] = mapped_column(Date, nullable=False)
     country: Mapped[str] = mapped_column(String(40), nullable=False)
 
-    # LINK EVENT WITH DRIVERS
+    # ASSOCIATE WITH EVENTS(MtM) and RESULTS(OtM)
     events: Mapped[List[Event]] = relationship(secondary=association_table, back_populates="drivers")
+    results = relationship("Result", back_populates="driver")
 
 
-# TODO create results DB. one-to-many w/ event, one-to-many w/ driver
+# RESULT TABLE
+class Result(db.Model):
+    __tablename__ = 'results'
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    start_number: Mapped[int] = mapped_column(Integer, nullable=False)
+    time_seconds: Mapped[int] = mapped_column(Integer, nullable=True)
+    ss_1 = mapped_column(String, nullable=True)
+    ss_2 = mapped_column(String, nullable=True)
+    ss_3 = mapped_column(String, nullable=True)
+    ss_4 = mapped_column(String, nullable=True)
+    ss_5 = mapped_column(String, nullable=True)
+
+
+
+    # ASSOCIATE WITH EVENT(OtM) AND DRIVER(OtM)
+    event_id: Mapped[int] = mapped_column(ForeignKey('events.id'))
+    event = relationship("Event", back_populates="results")
+    driver_id: Mapped[int] = mapped_column(ForeignKey('drivers.id'))
+    driver = relationship("Driver", back_populates="results")
 
 
 with app.app_context():
@@ -144,27 +166,52 @@ def create_new_event():
 @app.route('/event/<int:event_id>', methods=["POST", "GET"])
 def event(event_id):
     current_event = db.get_or_404(Event, event_id)
-    form = RegisterDriverForm()
-    form.submit.label.text = f'Register driver for {current_event.name}'
+
+    # GET RESULTS LIST
+    results = db.session.execute(db.select(Result).filter_by(event_id=event_id)).scalars()
+    logging.warning(f'results is {results}')
+
+    # REGISTER DRIVER FORM
+    register_driver_form = RegisterDriverForm()
+    register_driver_form.submit.label.text = f'Register driver for {current_event.name}'
+
 
     # GET REGISTERED DRIVERS
     registered_drivers = current_event.drivers
 
     # GET UNREGISTERED DRIVERS
     unregistered_drivers = [item for item in db.session.query(Driver) if item not in registered_drivers]
-    form.driver.choices = [item.last_name + ', ' + item.first_name for item in unregistered_drivers]
+    register_driver_form.driver.choices = [item.last_name + ', ' + item.first_name for item in unregistered_drivers]
 
-    if request.method == "POST":
-        selected_driver_firstname = form.driver.data.split(', ')[1]
-        selected_driver_lastname = form.driver.data.split(', ')[0]
+    if request.method == "POST" and register_driver_form.validate_on_submit():
+        logging.warning('submitting driver form')
+
+        # REGISTERING DRIVER
+        selected_driver_firstname = register_driver_form.driver.data.split(', ')[1]
+        selected_driver_lastname = register_driver_form.driver.data.split(', ')[0]
 
         selected_driver = db.session.execute(db.select(Driver).filter_by(first_name=selected_driver_firstname,
                                                                          last_name=selected_driver_lastname)).scalar()
         current_event.drivers.append(selected_driver)
         db.session.commit()
+
+        # CREATING RESULT ENTRY
+        new_result = Result(
+            start_number=register_driver_form.start_number.data,
+            event_id=current_event.id,
+            driver_id=selected_driver.id,
+        )
+        db.session.add(new_result)
+        db.session.commit()
+
+        logging.warning(f'the type is {type(current_event.results)}')
+
         return redirect(url_for('event', event_id=current_event.id))
 
-    return render_template('event.html', event=current_event, form=form)
+    return render_template('event.html',
+                           event=current_event,
+                           register_driver_form=register_driver_form,
+                           )
 
 
 # SINGLE DRIVER ROUTE
@@ -229,7 +276,6 @@ def all_events():
 def remove_driver_from_event(event_id, driver_id):
     current_event = db.get_or_404(Event, event_id)
     current_driver = db.get_or_404(Driver, driver_id)
-    # current_driver.events.remove(current_event)
     current_event.drivers.remove(current_driver)
     db.session.commit()
     return redirect(url_for('event', event_id=event_id))
@@ -243,7 +289,6 @@ def search():
 
     # GET SEARCH RESULTS
     event_names = [item.name for item in db.session.query(Event)]
-    # driver_names = [item.first_name for item in db.session.query(Driver) if searched in item.first_name]
     driver_names = []
     for item in db.session.query(Driver):
         if searched in item.first_name or searched in item.last_name:
@@ -255,9 +300,40 @@ def search():
     return render_template('search_results.html', results_drivers=results_drivers, results_events=results_events)
 
 
+# ADD RESULTS ROUTE
+# @app.route('/add_results/<int:event_id>')
+# def add_results(event_id):
+#     current_event = db.get_or_404(Event, event_id)
+#     return render_template('add_results.html', event=current_event)
+
+# EDIT RESULTS ROUTE
+@app.route('/edit_result/<int:result_id>', methods=["POST", "GET"])
+def edit_result(result_id):
+    current_result = db.get_or_404(Result, result_id)
+    form = EditResultForm()
+
+    if request.method == "POST":
+        form.validate_on_submit()
+        current_result.ss_1 = form.ss_1.data
+        current_result.ss_2 = form.ss_2.data
+        current_result.ss_3 = form.ss_3.data
+        current_result.ss_4 = form.ss_4.data
+        current_result.ss_5 = form.ss_5.data
+        db.session.commit()
+        return redirect(url_for('event', event_id=current_result.event_id))
+
+    return render_template('edit_result.html', result=current_result, form=form)
+
+
 # TODO login button functionality
 
 # TODO edit event and edit driver routes
+
+@app.route('/testing')
+def testing():
+    form1 = TelephoneForm()
+    form2 = ContactForm()
+    return render_template('testing.html', form1=form1, form2=form2)
 
 
 if __name__ == '__main__':

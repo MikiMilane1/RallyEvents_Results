@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% from "bootstrap5/form.html" import render_form %}
+
+{% block title %}
+Edit result for {{ result.event.name }}
+{% endblock %}
+
+{% block header %}
+{% include "header.html" %}
+{% endblock %}
+{% block content %}
+<div class="container-fluid col-xxl-2 py-5">
+    <div class="row">
+        Edit result for driver {{ result.driver.last_name }}, {{ result.driver.first_name }} at {{ result.event.name
+        }}
+        {{ render_form(form, novalidate=True) }}
+
+    </div>
+</div>
+{% endblock %}

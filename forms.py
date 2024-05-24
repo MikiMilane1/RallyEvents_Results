@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, DateField, FloatField, SelectField, IntegerField
+from wtforms import StringField, SubmitField, DateField, FloatField, SelectField, IntegerField, FormField
 from wtforms.validators import DataRequired, URL
 from country_list import countries_for_language
 
@@ -40,9 +40,33 @@ class NewDriverForm(FlaskForm):
 # REGISTER DRIVER TO EVENT
 class RegisterDriverForm(FlaskForm):
     driver = SelectField(label='Register new driver', choices=[])
+    start_number = IntegerField(label='Start number')
     submit = SubmitField(label='label')
 
 
 # SEARCH FORM
 class SearchForm(FlaskForm):
-    searched = StringField(render_kw={'style': 'width: 30ch'})
+    searched = StringField()
+
+
+# EDIT RESULT FORM
+class EditResultForm(FlaskForm):
+    ss_1 = StringField(label='SS 1')
+    ss_2 = StringField(label='SS 2')
+    ss_3 = StringField(label='SS 3')
+    ss_4 = StringField(label='SS 3')
+    ss_5 = StringField(label='SS 4')
+    submit = SubmitField(label='Edit result entry')
+
+
+class TelephoneForm(FlaskForm):
+    country_code = IntegerField('Country Code')
+    area_code = IntegerField('Area Code/Exchange')
+    number = StringField('Number')
+
+
+class ContactForm(FlaskForm):
+    first_name = StringField()
+    last_name = StringField()
+    mobile_phone = FormField(TelephoneForm)
+    office_phone = FormField(TelephoneForm)
