@@ -9,12 +9,15 @@ Edit result for {{ result.event.name }}
 {% include "header.html" %}
 {% endblock %}
 {% block content %}
-<div class="container-fluid col-xxl-2 py-5">
-    <div class="row">
-        Edit result for driver {{ result.driver.last_name }}, {{ result.driver.first_name }} at {{ result.event.name
-        }}
-        {{ render_form(form, novalidate=True) }}
-
-    </div>
+<div class="container-left border px-5">
+    <form method="POST">
+        <div class="py-4 col-xxl-6 col-xl-2">
+            {{ form.ss_label.label }} {{ form.ss_1_m }} {{ form.ss_1_s }} {{ form.ss_1_t }}
+        </div>
+        <div>
+            {{ form.submit(class="btn custom_button") }}
+        </div>
+    </form>
 </div>
+
 {% endblock %}

@@ -24,3 +24,7 @@ a:hover {
 a {
     color: r#fff));
     text-decoration: none;
+
+#myform {
+    display: flex;
+}

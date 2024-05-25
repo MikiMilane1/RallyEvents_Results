@@ -116,15 +116,14 @@ Event: {{ event.name }}
                             {{ result.driver.first_name }}</a></td>
                         <td scope="col">{{ result.driver.country }}</td>
                         <td scope="col">Ford Fiesta 1.6tdci</td>
-                        <td scope="col">{{ result.ss_1 }}</td>
-                        <td scope="col">{{ result.ss_2 }}</td>
-                        <td scope="col">{{ result.ss_3 }}</td>
-                        <td scope="col">{{ result.ss_4 }}</td>
-                        <td scope="col">{{ result.ss_5 }}</td>
+                        <td scope="col"><a href="{{ url_for('edit_result', result_id=result.id, ss_id=1) }}">{{ result.ss_1 }}</a></td>
+                        <td scope="col"><a href="{{ url_for('edit_result', result_id=result.id, ss_id=2) }}">{{ result.ss_2 }}</a></td>
+                        <td scope="col"><a href="{{ url_for('edit_result', result_id=result.id, ss_id=3) }}">{{ result.ss_3 }}</a></td>
+                        <td scope="col"><a href="{{ url_for('edit_result', result_id=result.id, ss_id=4) }}">{{ result.ss_4 }}</a></td>
+                        <td scope="col"><a href="{{ url_for('edit_result', result_id=result.id, ss_id=5) }}">{{ result.ss_5 }}</a></td>
                         <td scope="col">
-                            <a href="{{ url_for('edit_result', result_id=result.id) }}">Edit result</a>
+                            <a href="{{ url_for('edit_result', result_id=result.id, ss_id=1) }}">Edit result</a>
                         </td>
-
 
                     </tr>
                     {% endfor %}

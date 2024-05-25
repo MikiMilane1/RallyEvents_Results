@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, DateField, FloatField, SelectField, IntegerField, FormField
+from wtforms import (StringField, SubmitField, DateField, FloatField, SelectField, IntegerField, FormField, HiddenField,
+                     PasswordField, Label)
 from wtforms.validators import DataRequired, URL
 from country_list import countries_for_language
 
@@ -50,13 +51,13 @@ class SearchForm(FlaskForm):
 
 
 # EDIT RESULT FORM
-class EditResultForm(FlaskForm):
-    ss_1 = StringField(label='SS 1')
-    ss_2 = StringField(label='SS 2')
-    ss_3 = StringField(label='SS 3')
-    ss_4 = StringField(label='SS 3')
-    ss_5 = StringField(label='SS 4')
-    submit = SubmitField(label='Edit result entry')
+class EditSSForm(FlaskForm):
+    # SS1
+    ss_label = HiddenField(label='SS 1')
+    ss_1_m = IntegerField(label='', render_kw={"placeholder": "minutes"})
+    ss_1_s = IntegerField(label='', render_kw={"placeholder": "seconds"})
+    ss_1_t = IntegerField(label='', render_kw={"placeholder": "tenths"})
+    submit = SubmitField(label="Apply edits")
 
 
 class TelephoneForm(FlaskForm):
@@ -70,3 +71,10 @@ class ContactForm(FlaskForm):
     last_name = StringField()
     mobile_phone = FormField(TelephoneForm)
     office_phone = FormField(TelephoneForm)
+
+
+class login_form(FlaskForm):
+    some_hiden_field = HiddenField()
+    username = StringField('User Name :', validators=[DataRequired()])
+    password = PasswordField('Password :', validators=[DataRequired()])
+    submit_btn = SubmitField('Submit')

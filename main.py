@@ -3,10 +3,11 @@ from typing import List
 from dotenv import load_dotenv
 import os
 import logging
+import datetime as dt
 
 import sqlalchemy.exc
 from flask import Flask, render_template, request, redirect, url_for
-from forms import NewDriverForm, NewEventForm, RegisterDriverForm, SearchForm, EditResultForm, TelephoneForm, ContactForm
+from forms import NewDriverForm, NewEventForm, RegisterDriverForm, SearchForm, EditSSForm, TelephoneForm, login_form
 from wtforms import Label
 from flask_bootstrap import Bootstrap5
 
@@ -96,12 +97,11 @@ class Result(db.Model):
     __tablename__ = 'results'
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     start_number: Mapped[int] = mapped_column(Integer, nullable=False)
-    time_seconds: Mapped[int] = mapped_column(Integer, nullable=True)
-    ss_1 = mapped_column(String, nullable=True)
-    ss_2 = mapped_column(String, nullable=True)
-    ss_3 = mapped_column(String, nullable=True)
-    ss_4 = mapped_column(String, nullable=True)
-    ss_5 = mapped_column(String, nullable=True)
+    ss_1 = mapped_column(Time, nullable=True)
+    ss_2 = mapped_column(Time, nullable=True)
+    ss_3 = mapped_column(Time, nullable=True)
+    ss_4 = mapped_column(Time, nullable=True)
+    ss_5 = mapped_column(Time, nullable=True)
 
 
 
@@ -307,18 +307,17 @@ def search():
 #     return render_template('add_results.html', event=current_event)
 
 # EDIT RESULTS ROUTE
-@app.route('/edit_result/<int:result_id>', methods=["POST", "GET"])
-def edit_result(result_id):
+@app.route('/edit_result/<int:result_id>/ss<int:ss_id>', methods=["POST", "GET"])
+def edit_result(result_id, ss_id):
     current_result = db.get_or_404(Result, result_id)
-    form = EditResultForm()
+    form = EditSSForm()
+    form.ss_label.label = f'SS {ss_id}'
 
     if request.method == "POST":
         form.validate_on_submit()
-        current_result.ss_1 = form.ss_1.data
-        current_result.ss_2 = form.ss_2.data
-        current_result.ss_3 = form.ss_3.data
-        current_result.ss_4 = form.ss_4.data
-        current_result.ss_5 = form.ss_5.data
+        microseconds = form.ss_1_t.data * pow(10, 5)
+        exec(f'current_result.ss_{ss_id} = dt.time(minute=form.ss_1_m.data, second=form.ss_1_s.data, microsecond=microseconds)')
+
         db.session.commit()
         return redirect(url_for('event', event_id=current_result.event_id))
 
@@ -331,9 +330,8 @@ def edit_result(result_id):
 
 @app.route('/testing')
 def testing():
-    form1 = TelephoneForm()
-    form2 = ContactForm()
-    return render_template('testing.html', form1=form1, form2=form2)
+    form = login_form()
+    return render_template('testing.html', form=form)
 
 
 if __name__ == '__main__':
