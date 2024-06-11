@@ -28,7 +28,7 @@ Drivers
             <tr>
                 <td>{{ driver.id }}</td>
                 <td>
-                    <a href="{{ url_for('driver', driver_id=driver.id) }}">{{ driver.last_name }}, {{ driver.first_name }}</a>
+                    <a href="{{ url_for('driver.driver', driver_id=driver.id) }}">{{ driver.last_name }}, {{ driver.first_name }}</a>
                 </td>
                 <td>{{ driver.birth_date }}</td>
                 <td>{{ driver.country }}</td>
@@ -38,7 +38,7 @@ Drivers
     </div>
     <div>
         <button class="btn custom_button">
-            <a href="{{ url_for('add_new_driver') }}">Add new driver to DB</a>
+            <a href="{{ url_for('driver.add_new_driver') }}">Add new driver to DB</a>
         </button>
     </div>
     {% endblock %}
