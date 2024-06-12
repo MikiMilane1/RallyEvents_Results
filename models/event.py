@@ -23,3 +23,7 @@ class EventModel(db.Model):
 
     # OtM w/ results
     results = db.relationship("ResultModel", back_populates="event")
+
+    @property
+    def year(self):
+        return self.date_from.year

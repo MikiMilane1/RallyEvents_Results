@@ -26,7 +26,7 @@ Events
             {% for item in all_events: %}
             <tr>
                 {% if item.series_instance == None %}
-                <td><a href="{{ url_for('event', event_id=item.id) }}">{{ item.name }} {{
+                <td><a href="{{ url_for('event.event', event_id=item.id) }}">{{ item.name }} {{
                     item.year }}</a></td>
                 {% else %}
                 <td><a href="{{ url_for('event', event_id=item.id) }}">{{ item.series_instance }}. {{ item.name }} {{

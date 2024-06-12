@@ -78,7 +78,8 @@ Event: {{ event.name }}
                     </tr>
                     {% for driver in event.drivers %}
                     <tr>
-                        <td scope="col"><a href="{{ url_for('driver', driver_id=driver.id) }}">{{ driver.last_name }},
+                        <td scope="col"><a href="{{ url_for('driver.driver', driver_id=driver.id) }}">{{
+                            driver.last_name }},
                             {{ driver.first_name }}</a></td>
                         <td scope="col">{{ driver.country }}</td>
                         <td scope="col">Ford Fiesta 1.6tdci</td>
@@ -118,18 +119,21 @@ Event: {{ event.name }}
                         <th scope="col">SS {{ event.ss_num }}</th>
                         <th scope="col">Final</th>
                     </tr>
-                    {% for result in event.results %}
+                    {% for result in results %}
 
                     <tr>
                         <td scope="col-xl-2 col-xxl-2">{{ result.start_number }}</td>
                         <td scope="col"><a href="#">{{ result.driver.last_name }},
                             {{ result.driver.first_name }}</a></td>
                         <td scope="col">{{ result.driver.country }}</td>
-                        <td scope="col">Ford Fiesta 1.6tdci</td>
-                        <td scope="col"><a href="{{ url_for('edit_result', result_id=result.id, ss_id=1) }}">{{ result.ss_1 }}</a></td>
-                        <td scope="col"><a href="{{ url_for('edit_result', result_id=result.id, ss_id=1) }}">{{
-                            test }}</a></td>
-                        <td scope="col">Final goes here</td>
+                        <td scope="col">{{ result.car }}</td>
+
+                        <!-- RENDER SPECIAL SECTION VALUES -->
+                        {% for spec_sec in result.special_sections %}
+                            <td scope="col"><a href="{{ url_for('result.edit_result', result_id=result.id, ss_id=spec_sec.id) }}">{{ spec_sec.time_str }}</a></td>
+                            <td scope="col">{{ result.afters_str[loop.index0] }}</td>
+                        {% endfor %}
+
                     </tr>
                     {% endfor %}
 

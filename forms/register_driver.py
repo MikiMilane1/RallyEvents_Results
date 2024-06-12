@@ -7,4 +7,5 @@ from wtforms.validators import DataRequired, URL
 class RegisterDriverForm(FlaskForm):
     driver = SelectField(label='Register new driver', choices=[])
     start_number = IntegerField(label='Start number')
+    car = StringField(label='Car model')
     submit = SubmitField(label='label')
