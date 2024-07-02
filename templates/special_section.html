@@ -1,0 +1,50 @@
+<div class="container-fluid px-0 py-5">
+    <div class="row px-5">
+        <div class="col-sm">
+            <table class="table">
+                <tr>
+                    <th scope="col">Start number</th>
+                    <th scope="col">Driver</th>
+                    <th scope="col">Country</th>
+                    <th scope="col">Car</th>
+                    <th scope="col">SS {{n}} Time</th>
+                </tr>
+                {% for result in results %}
+                <tr>
+                    <td scope="col">{{result.start_number}}</td>
+                    <td scope="col">{{result.driver_name}}</td>
+                    <td scope="col">{{result.driver.country}}</td>
+                    <td scope="col">{{result.car}}</td>
+                    <td scope="col"><a href="{{ url_for('edit_ss.edit_ss', ss_id=result.special_sections[n-1].id) }}">{{result.special_sections[n-1].time_str}}</a>
+                    </td>
+                </tr>
+                {% endfor %}
+
+            </table>
+        </div>
+        <div class="col-1"></div>
+        <div class="col-sm">
+            <table class="table">
+                <tr>
+                    <th scope="col">Start number</th>
+                    <th scope="col">Driver</th>
+                    <th scope="col">Country</th>
+                    <th scope="col">Car</th>
+                    <th scope="col">Final</th>
+
+                </tr>
+                {% for result in final_results %}
+                <tr>
+                    <td scope="col">{{result.start_number}}</td>
+                    <td scope="col">{{result.driver_name}}</td>
+                    <td scope="col">{{result.driver.country}}</td>
+                    <td scope="col">{{result.car}}</td>
+                    <td scope="col">{{result.finish_time}}</td>
+
+                </tr>
+                {% endfor %}
+
+            </table>
+        </div>
+    </div>
+</div>

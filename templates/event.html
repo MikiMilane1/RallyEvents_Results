@@ -46,103 +46,46 @@ Event: {{ event.name }}
     </tr>
 </table>
 
-<!--RESULTS TABLE-->
+<!--TABS -->
 <div class="container-flex px-3">
     <ul class="nav nav-tabs" id="myTab" role="tablist">
+
+        <!-- RENDER ENTRY LIST TAB -->
         <li class="nav-item" role="presentation">
             <button class="nav-link active" id="drivers-tab" data-bs-toggle="tab" data-bs-target="#drivers"
                     type="button"
                     role="tab" aria-controls="drivers" aria-selected="true">Entry List
             </button>
         </li>
+
+        <!-- RENDER SPECIAL SECTIONS TABS -->
+        {% for n in range(1, event.ss_num+1) %}
         <li class="nav-item" role="presentation">
-            <button class="nav-link" id="results-tab" data-bs-toggle="tab" data-bs-target="#results" type="button"
-                    role="tab" aria-controls="results" aria-selected="false">Results
+            <button class="nav-link" id="ss{{n}}-tab" data-bs-toggle="tab" data-bs-target="#ss{{n}}" type="button"
+                    role="tab" aria-controls="ss{{n}}" aria-selected="false">SS {{n}}
             </button>
         </li>
+        {% endfor %}
     </ul>
+
     <div class="tab-content" id="myTabContent">
 
-        <!--DRIVERS TAB-->
+        <!--ENTRY LIST TAB-->
+
         <div class="tab-pane fade show active" id="drivers" role="tabpanel" aria-labelledby="drivers-tab">
-            <div class="py-4 col-xxl-4">
-
-                {% if event.drivers == [] %}
-                <div class="p-3" style="color: red">No drivers registered</div>
-                {% else %}
-                <table class="table">
-                    <tr>
-                        <th scope="col">Driver</th>
-                        <th scope="col">Country</th>
-                        <th scope="col">Car</th>
-                    </tr>
-                    {% for driver in event.drivers %}
-                    <tr>
-                        <td scope="col"><a href="{{ url_for('driver.driver', driver_id=driver.id) }}">{{
-                            driver.last_name }},
-                            {{ driver.first_name }}</a></td>
-                        <td scope="col">{{ driver.country }}</td>
-                        <td scope="col">Ford Fiesta 1.6tdci</td>
-
-                    </tr>
-                    {% endfor %}
-                </table>
-                {% endif %}
-
-                <div class="col-sm-12 col-md-12 col-xl-6 col-xxl-6 p-3">
-                    {{ render_form(register_driver_form, novalidate=True) }}
-                </div>
-            </div>
+            {% block entrylist %}
+            {% include "entry_list.html" %}
+            {% endblock %}
         </div>
 
-        <!--RESULTS TAB-->
-        <div class="tab-pane fade" id="results" role="tabpanel" aria-labelledby="results-tab">
-            <div class="py-4 col-xxl-12">
-
-                {% if event.drivers == [] %}
-                <div class="p-3" style="color: red">No results recorded</div>
-                {% else %}
-                <table class="table">
-                    <tr>
-
-                    </tr>
-                    <tr>
-                        <th scope="col">Start number</th>
-                        <th scope="col">Driver</th>
-                        <th scope="col">Country</th>
-                        <th scope="col">Car</th>
-                        <!-- RENDER SPECIAL SECTIONS HEADERS -->
-                        {% for n in range(1, event.ss_num) %}
-                        <th scope="col">SS {{ n }}</th>
-                        <th scope="col">After SS {{ n }}</th>
-                        {% endfor %}
-                        <th scope="col">SS {{ event.ss_num }}</th>
-                        <th scope="col">Final</th>
-                    </tr>
-                    {% for result in results %}
-
-                    <tr>
-                        <td scope="col-xl-2 col-xxl-2">{{ result.start_number }}</td>
-                        <td scope="col"><a href="#">{{ result.driver.last_name }},
-                            {{ result.driver.first_name }}</a></td>
-                        <td scope="col">{{ result.driver.country }}</td>
-                        <td scope="col">{{ result.car }}</td>
-
-                        <!-- RENDER SPECIAL SECTION VALUES -->
-                        {% for spec_sec in result.special_sections %}
-                            <td scope="col"><a href="{{ url_for('result.edit_result', result_id=result.id, ss_id=spec_sec.id) }}">{{ spec_sec.time_str }}</a></td>
-                            <td scope="col">{{ result.afters_str[loop.index0] }}</td>
-                        {% endfor %}
-
-                    </tr>
-                    {% endfor %}
-
-                </table>
-                {% endif %}
-
-            </div>
-
+        <!--SS RESULTS TABS-->
+        {% for n in range(1, event.ss_num+1) %}
+        <div class="tab-pane fade" id="ss{{n}}" role="tabpanel" aria-labelledby="ss{{n}}-tab">
+            {% set results = ss_dict["ss_" ~ n] %}
+            {% set final_results = ss_dict['final'] %}
+            {% include "special_section.html" %}
         </div>
+        {% endfor %}
     </div>
 </div>
 {% endblock %}

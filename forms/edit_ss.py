@@ -11,7 +11,7 @@ country_names_list = list(country_names.keys())
 class EditSSForm(FlaskForm):
     # SS1
     ss_label = HiddenField(label='SS 1')
-    ss_1_m = IntegerField(label='', render_kw={"placeholder": "minutes"})
-    ss_1_s = IntegerField(label='', render_kw={"placeholder": "seconds"})
-    ss_1_t = IntegerField(label='', render_kw={"placeholder": "tenths"})
+    ss_1_m = IntegerField(label='', render_kw={"placeholder": "minutes"}, validators=[DataRequired()])
+    ss_1_s = IntegerField(label='', render_kw={"placeholder": "seconds"}, validators=[DataRequired()])
+    ss_1_t = IntegerField(label='', render_kw={"placeholder": "tenths"}, validators=[DataRequired()])
     submit = SubmitField(label="Apply edits")

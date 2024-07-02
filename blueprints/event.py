@@ -36,13 +36,19 @@ def event(event_id):
 
     # SORT RESULTS BY FINISH TIME
     results_list = [item for item in current_event.results]
-    print(f"unorganized list is {results_list}")
+    results_list_sorted = sorted(results_list, key=lambda x: x.finish_time, reverse=False)
 
-    results_list_sorted = sorted(results_list, key=lambda x: x.finish_time, reverse=True)
-    print(f"sorted list is {results_list_sorted}")
-    print('finish times are')
-    for item in results_list_sorted:
-        print(item.finish_time)
+    # SORT RESULTS BY SPECIAL SECTIONS
+    ss_dict = {}
+    ss_dict['final'] = results_list_sorted
+
+    for n in range(1, current_event.ss_num + 1):
+        ss_sorted = SSModel.query.join(ResultModel).join(EventModel).filter(
+            EventModel.id == current_event.id,
+            SSModel.ss_num == n
+        ).order_by(SSModel.time.asc()).all()
+        logging.warning(msg=ss_sorted)
+        ss_dict[f"ss_{n}"] = [item.result for item in ss_sorted]
 
     if request.method == "POST" and register_driver_form.validate_on_submit():
         logging.warning('submitting driver form')
@@ -82,32 +88,10 @@ def event(event_id):
     print(f'drivers for this events are {current_event.drivers}')
     return render_template('event.html',
                            event=current_event,
-                           register_driver_form=register_driver_form, ss_num=current_event,
-                           results=results_list_sorted
+                           register_driver_form=register_driver_form,
+                           results=results_list_sorted,
+                           ss_dict=ss_dict
                            )
 
 
-# ADD EVENT ROUTE
-@blp.route('/add_event', methods=["POST", "GET"])
-def create_new_event():
-    country_names = {name: code for code, name in countries_for_language('en')}
-    country_names_list = list(country_names.keys())
 
-    form = NewEventForm()
-    form.country.choices = country_names_list
-
-    if request.method == "POST":
-        form.validate_on_submit()
-
-        # ADD EVENT TO DB
-        print(form.data)
-        event_data = {k: v for k, v in form.data.items() if k != "submit" and k != "csrf_token"}
-        new_event = EventModel(**event_data)
-        db.session.add(new_event)
-        db.session.commit()
-
-        # REQUESTING ADDED EVENT FOR REDIRECT
-        requested_event = new_event
-
-        return redirect(url_for('event.event', event_id=requested_event.id))
-    return render_template('new_event.html', form=form)

@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 from db import db
 from forms import NewDriverForm
-from models import DriverModel
+from models import DriverModel, EventModel
 from sqlalchemy.exc import IntegrityError
 
 blp = Blueprint("driver", __name__)
@@ -48,8 +48,8 @@ def driver(driver_id):
 # REMOVE DRIVER FROM EVENT
 @blp.route('/remove_driver from event/<int:event_id>/<int:driver_id>')
 def remove_driver_from_event(event_id, driver_id):
-    current_event = db.get_or_404(Event, event_id)
-    current_driver = db.get_or_404(Driver, driver_id)
+    current_event = db.get_or_404(EventModel, event_id)
+    current_driver = db.get_or_404(DriverModel, driver_id)
     current_event.drivers.remove(current_driver)
     db.session.commit()
     return redirect(url_for('event', event_id=event_id))

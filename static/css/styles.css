@@ -28,3 +28,14 @@ a {
 #myform {
     display: flex;
 }
+
+.flex-divider {
+    display: flex;
+    align-items: stretch;
+}
+.flex-divider .divider {
+    background-color: #ddd; /* Adjust color */
+    width: 2px; /* Adjust thickness */
+    height: auto;
+    margin: 0;
+}

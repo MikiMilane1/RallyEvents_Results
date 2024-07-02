@@ -1,10 +1,5 @@
-import datetime
 import datetime as dt
 import math
-import logging
-from models.result import ResultModel
-from models.ss import SSModel
-from models.event import EventModel
 
 
 def add_time(*args):
@@ -37,15 +32,3 @@ def add_time(*args):
 
     sum_time = dt.time(hour=total_hours, minute=total_minutes, second=total_seconds, microsecond=total_microseconds)
     return sum_time
-
-
-def place_drivers(event):
-    num_of_ss = event.ss_num
-
-    ss_sorted_dict = {}
-    for ss in range(1, num_of_ss+1):
-        ss_list = SSModel.query.filter(SSModel.event == event, SSModel.ss_num == ss).all()
-        ss_list_sorted = sorted(ss_list, key=lambda x: x.time, reverse=False)
-        ss_sorted_dict[f'ss{ss}_sorted'] = ss_list_sorted
-
-    return ss_sorted_dict

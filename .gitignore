@@ -161,3 +161,6 @@ cython_debug/
 
 # Project specific
 instance/testing
+
+# My exceptions
+testing.py

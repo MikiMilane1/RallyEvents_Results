@@ -1,0 +1,40 @@
+{% from "bootstrap5/form.html" import render_form %}
+
+
+<div class="container-fluid px-5 py-5">
+    <div class="py-5">
+        form goes here
+    </div>
+
+    <div id="entry-list">
+        {% if event.drivers == [] %}
+        <div class="p-5" style="color: red">No registered drivers</div>
+        {% else %}
+        <table class="table">
+
+            <tr>
+                <th scope="col">Start number</th>
+                <th scope="col">Driver</th>
+                <th scope="col">Country</th>
+                <th scope="col">Team</th>
+                <th scope="col">Car</th>
+                <th scope="col">Plates</th>
+
+            </tr>
+
+            {% for result in results %}
+            <tr>
+                <td scope="col-xl-2 col-xxl-2">{{ result.start_number }}</td>
+                <td scope="col"><a href="#">{{ result.driver.last_name }},
+                    {{ result.driver.first_name }}</a></td>
+                <td scope="col">{{ result.driver.country }}</td>
+                <td scope="col">{{ result.car }}</td>
+
+            </tr>
+            {% endfor %}
+
+        </table>
+        {% endif %}
+    </div>
+
+</div>

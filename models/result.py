@@ -1,3 +1,5 @@
+from sqlalchemy.ext.hybrid import hybrid_property
+
 from db import db
 import datetime as dt
 from functions import add_time
@@ -47,7 +49,7 @@ class ResultModel(db.Model):
         afters_list_str = [str(item)[3:-2] for item in self.afters]
         return afters_list_str
 
-    @property
+    @hybrid_property
     def finish_time(self):
         time_sum = dt.time(
             hour=0,

@@ -15,4 +15,12 @@ class SSModel(db.Model):
 
     @property
     def time_str(self):
-        return str(self.time)[3:-3]
+        return str(self.time)
+
+    @property
+    def event(self):
+        return self.result.event
+
+    @property
+    def driver(self):
+        return self.result.driver

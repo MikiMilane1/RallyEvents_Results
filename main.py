@@ -12,6 +12,8 @@ from blueprints.driver import blp as DriverBP
 from blueprints.event import blp as EventBP
 from blueprints.search import blp as SearchBP
 from blueprints.home import blp as HomeBP
+from blueprints.edit_ss import blp as EditSSBP
+from blueprints.add_and_edit_event import blp as AddEditEventBP
 
 app = Flask(__name__)
 Bootstrap5(app)
@@ -37,6 +39,8 @@ app.register_blueprint(DriverBP)
 app.register_blueprint(ResultBP)
 app.register_blueprint(SearchBP)
 app.register_blueprint(HomeBP)
+app.register_blueprint(EditSSBP)
+app.register_blueprint(AddEditEventBP)
 
 
 @app.route('/testing')
