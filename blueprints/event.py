@@ -1,12 +1,14 @@
-from country_list import countries_for_language
 from flask import Blueprint, render_template, request, redirect, url_for
 from db import db
-from models import EventModel, ResultModel, DriverModel, SSModel
+import os
+from models import EventModel, EventEntryModel, DriverModel, SSModel
 from forms import NewEventForm, RegisterDriverForm
 import datetime as dt
 import logging
+APP_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+TEMPLATE_PATH = os.path.join(APP_PATH, "templates", "event")
 
-blp = Blueprint("event", __name__)
+blp = Blueprint("event", __name__, template_folder=TEMPLATE_PATH)
 
 
 # ALL EVENTS ROUTE
@@ -20,8 +22,8 @@ def all_events():
 def event(event_id):
     current_event = db.get_or_404(EventModel, event_id)
 
-    # GET RESULTS LIST
-    results = db.session.execute(db.select(ResultModel).filter_by(event_id=event_id)).scalars()
+    # GET EVENT ENTRY LIST
+    event_entries = db.session.execute(db.select(EventEntryModel).filter_by(event_id=event_id)).scalars()
 
     # REGISTER DRIVER FORM
     register_driver_form = RegisterDriverForm()
@@ -34,24 +36,21 @@ def event(event_id):
     unregistered_drivers = [item for item in db.session.query(DriverModel) if item not in registered_drivers]
     register_driver_form.driver.choices = [item.last_name + ', ' + item.first_name for item in unregistered_drivers]
 
-    # SORT RESULTS BY FINISH TIME
-    results_list = [item for item in current_event.results]
-    results_list_sorted = sorted(results_list, key=lambda x: x.finish_time, reverse=False)
+    # SORT EVENT ENTRIES BY FINISH TIME
+    event_entries_list = [item for item in current_event.event_entries]
+    event_entries_list_sorted = sorted(event_entries_list, key=lambda x: x.finish_time, reverse=False)
 
-    # SORT RESULTS BY SPECIAL SECTIONS
-    ss_dict = {}
-    ss_dict['final'] = results_list_sorted
-
+    # SORT EVENT ENTRIES BY SPECIAL SECTIONS
+    ss_dict = {'final': event_entries_list_sorted}
     for n in range(1, current_event.ss_num + 1):
-        ss_sorted = SSModel.query.join(ResultModel).join(EventModel).filter(
+        ss_sorted = SSModel.query.join(EventEntryModel).join(EventModel).filter(
             EventModel.id == current_event.id,
             SSModel.ss_num == n
         ).order_by(SSModel.time.asc()).all()
         logging.warning(msg=ss_sorted)
-        ss_dict[f"ss_{n}"] = [item.result for item in ss_sorted]
+        ss_dict[f"ss_{n}"] = [item.event_entry for item in ss_sorted]
 
     if request.method == "POST" and register_driver_form.validate_on_submit():
-        logging.warning('submitting driver form')
 
         # REGISTERING DRIVER
         selected_driver_firstname = register_driver_form.driver.data.split(', ')[1]
@@ -62,20 +61,20 @@ def event(event_id):
         current_event.drivers.append(selected_driver)
         db.session.commit()
 
-        # CREATE RESULT ENTRY
-        new_result = ResultModel(
+        # CREATE EVENT_ENTRY
+        new_event_entry = EventEntryModel(
             start_number=register_driver_form.start_number.data,
             car=register_driver_form.car.data,
             event_id=current_event.id,
             driver_id=selected_driver.id,
         )
-        db.session.add(new_result)
+        db.session.add(new_event_entry)
         db.session.commit()
 
         # CREATE SPECIAL SECTIONS
-        for n in range(1, new_result.event.ss_num + 1):
+        for n in range(1, new_event_entry.event.ss_num + 1):
             new_ss = SSModel(ss_num=n,
-                             result_id=new_result.id,
+                             event_entry_id=new_event_entry.id,
                              time=dt.time(hour=0,
                                           minute=0,
                                           second=0,
@@ -89,7 +88,7 @@ def event(event_id):
     return render_template('event.html',
                            event=current_event,
                            register_driver_form=register_driver_form,
-                           results=results_list_sorted,
+                           event_entry=event_entries,
                            ss_dict=ss_dict
                            )
 

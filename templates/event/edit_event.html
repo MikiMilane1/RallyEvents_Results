@@ -1,0 +1,24 @@
+{% from "bootstrap5/form.html" import render_form %}
+{% extends 'base_and_header/base.html' %}
+
+{% block title %}
+Edit event: {{event.name}}
+{% endblock %}
+
+{% block header %}
+{% include "base_and_header/header.html" %}
+{% endblock %}
+
+
+{% block content %}
+<div class="container py-2">
+    <div class="py-2">
+        <h4>Edit event</h4>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-xl-6 col-xxl-6">
+            {{ render_form(form, novalidate=True) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

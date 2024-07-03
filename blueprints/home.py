@@ -8,7 +8,7 @@ blp = Blueprint("home", __name__, template_folder=TEMPLATE_PATH)
 
 @blp.route("/")
 def index():
-    return render_template('index.html')
+    return render_template('home/index.html')
 
 @blp.route("/test")
 def test():

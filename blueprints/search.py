@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template, redirect, url_for
 from db import db
+from models import DriverModel
 
 blp = Blueprint("search", __name__)
-
 
 
 # SEARCH ROUTE

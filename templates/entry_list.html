@@ -1,9 +1,9 @@
 {% from "bootstrap5/form.html" import render_form %}
 
 
-<div class="container-fluid px-5 py-5">
-    <div class="py-5">
-        form goes here
+<div class="container-fluid px-5 py-1">
+    <div class="col-xl-4 col-xxl-4 py-2">
+        {{ render_form(form, novalidate=True) }}
     </div>
 
     <div id="entry-list">

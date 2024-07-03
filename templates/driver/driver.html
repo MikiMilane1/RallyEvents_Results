@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base_and_header/base.html' %}
 {% from "bootstrap5/form.html" import render_form %}
 
 {% block title %}
@@ -6,7 +6,7 @@ Driver: {{ driver.driver_name }}
 {% endblock %}
 
 {% block header %}
-{% include "header.html" %}
+{% include "base_and_header/header.html" %}
 {% endblock %}
 
 {% block content %}
@@ -32,8 +32,13 @@ Driver: {{ driver.driver_name }}
             </table>
 
         </div>
+        <button class="btn btn-primary btn-md">
+            <a href="{{ url_for('driver.edit_driver', driver_id=driver.id) }}">Edit Driver</a>
+        </button>
     </div>
+
 </div>
+
 <div class="row driver_events px-3">
     <table class="table col-xxl-10">
         <tr>
@@ -41,7 +46,7 @@ Driver: {{ driver.driver_name }}
         </tr>
         {% for event in driver.events %}
         <tr>
-            <td scope="col"><a href="{{ url_for('event', event_id=event.id) }}">{{ event.name }}</a></td>
+            <td scope="col"><a href="{{ url_for('event.event', event_id=event.id) }}">{{ event.name }}</a></td>
         </tr>
         {% endfor %}
     </table>

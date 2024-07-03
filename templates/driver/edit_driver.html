@@ -1,18 +1,19 @@
 {% from "bootstrap5/form.html" import render_form %}
-{% extends 'base.html' %}
+{% extends 'base_and_header/base.html' %}
 
 {% block title %}
-Add new driver
+Edit driver info for {{driver.}}
 {% endblock %}
 
 {% block header %}
-{% include "header.html" %}
+{% include "base_and_header/header.html" %}
 {% endblock %}
 
 {% block content %}
 <div class="container py-2">
     <div class="py-2">
-        <h4>Add driver to database</h4>
+        <h4>Edit driver info
+        </h4>
 
         <div class="row">
             <div class="col-sm-12 col-md-12 col-xl-6 col-xxl-6">
@@ -21,4 +22,4 @@ Add new driver
         </div>
     </div>
 </div>
-    {% endblock %}
+{% endblock %}

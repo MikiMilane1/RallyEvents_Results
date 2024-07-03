@@ -2,7 +2,7 @@ from country_list import countries_for_language
 from flask import Blueprint, render_template, request, redirect, url_for
 from db import db
 import os
-from models import EventModel, ResultModel, DriverModel, SSModel
+from models import EventModel, EventEntryModel, DriverModel, SSModel
 from forms import NewEventForm, RegisterDriverForm
 import datetime as dt
 import logging
@@ -26,7 +26,6 @@ def create_new_event():
         form.validate_on_submit()
 
         # ADD EVENT TO DB
-        print(form.data)
         event_data = {k: v for k, v in form.data.items() if k != "submit" and k != "csrf_token"}
         new_event = EventModel(**event_data)
         db.session.add(new_event)
@@ -41,5 +40,9 @@ def create_new_event():
 
 # EDIT EVENT ROUTE
 @blp.route('/edit_event/<int:event_id>', methods=["POST", "GET"])
-def edit_event():
-    return 'edit event goes here'
+def edit_event(event_id):
+    event = db.get_or_404(EventModel, event_id)
+    form = NewEventForm()
+    if request.method == 'GET':
+        return 'Well hello there!'
+    return render_template('edit_event.html', event=event, form=form)

@@ -2,7 +2,7 @@ import datetime
 import datetime as dt
 import math
 import logging
-from models.result import ResultModel
+from models.event_entry import ResultModel
 from models.ss import SSModel
 from models.event import EventModel
 

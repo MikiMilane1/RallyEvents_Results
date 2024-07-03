@@ -12,8 +12,8 @@ class DriverModel(db.Model):
     birth_date = db.Column(db.Date, nullable=True)
     country = db.Column(db.String(40), nullable=True)
 
-    # OtM w/ results
-    results = db.relationship("ResultModel", back_populates="driver")
+    # OtM w/ event entries
+    event_entries = db.relationship("EventEntryModel", back_populates="driver")
 
     # MtM w/ events
     events = db.Relationship("EventModel", back_populates="drivers", secondary="event_driver_link")

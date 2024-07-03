@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base_and_header/base.html' %}
 {% from "bootstrap5/form.html" import render_form %}
 
 {% block title %}
@@ -6,11 +6,12 @@ Event: {{ event.name }}
 {% endblock %}
 
 {% block header %}
-{% include "header.html" %}
+{% include "base_and_header/header.html" %}
 {% endblock %}
 
 {% block content %}
 <!--EVENT INFO-->
+<div class="container-flex px-3">
 <table class="table">
     <tr>
         <th scope="col">Event name</th>
@@ -45,9 +46,13 @@ Event: {{ event.name }}
         <td scope="col">{{ event.ss_num }}</td>
     </tr>
 </table>
+<button class="btn btn-primary btn-md">
+            <a href="{{ url_for('add_and_edit_event.edit_event', event_id=event.id) }}">Edit Event</a>
+        </button>
+</div>
 
 <!--TABS -->
-<div class="container-flex px-3">
+<div class="container-flex px-3 py-5">
     <ul class="nav nav-tabs" id="myTab" role="tablist">
 
         <!-- RENDER ENTRY LIST TAB -->
@@ -67,6 +72,9 @@ Event: {{ event.name }}
         </li>
         {% endfor %}
     </ul>
+    <div>
+
+    </div>
 
     <div class="tab-content" id="myTabContent">
 
@@ -74,6 +82,7 @@ Event: {{ event.name }}
 
         <div class="tab-pane fade show active" id="drivers" role="tabpanel" aria-labelledby="drivers-tab">
             {% block entrylist %}
+            {% set form = register_driver_form %}
             {% include "entry_list.html" %}
             {% endblock %}
         </div>
@@ -83,7 +92,7 @@ Event: {{ event.name }}
         <div class="tab-pane fade" id="ss{{n}}" role="tabpanel" aria-labelledby="ss{{n}}-tab">
             {% set results = ss_dict["ss_" ~ n] %}
             {% set final_results = ss_dict['final'] %}
-            {% include "special_section.html" %}
+            {% include "special_section/special_section.html" %}
         </div>
         {% endfor %}
     </div>

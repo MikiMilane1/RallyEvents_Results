@@ -9,9 +9,9 @@ class SSModel(db.Model):
     time = db.Column(db.Time, nullable=True)
     distance = db.Column(db.Integer, nullable=True)
 
-    # MtO w/ result
-    result_id = db.Column(db.Integer, db.ForeignKey("results.id"), unique=False, nullable=False)
-    result = db.relationship("ResultModel", back_populates="special_sections")
+    # MtO w/ event_entry
+    event_entry_id = db.Column(db.Integer, db.ForeignKey("event_entries.id"), unique=False, nullable=False)
+    event_entry = db.relationship("EventEntryModel", back_populates="special_sections")
 
     @property
     def time_str(self):
@@ -19,8 +19,8 @@ class SSModel(db.Model):
 
     @property
     def event(self):
-        return self.result.event
+        return self.event_entry.event
 
     @property
     def driver(self):
-        return self.result.driver
+        return self.event_entry.driver

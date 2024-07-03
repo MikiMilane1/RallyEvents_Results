@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base_and_header/base.html' %}
 
 {% block title %}
 Home
@@ -10,7 +10,7 @@ Home
 
 {% block content %}
 {% if showcase_events|length < 3 %}
-No existing eventsssss
+No events
 {% else %}
 <div class="album py-5 bg-body-tertiary">
     <div class="container">

@@ -7,13 +7,16 @@ from forms import LoginForm
 from flask import Flask, render_template, request, redirect, url_for
 from flask_bootstrap import Bootstrap5
 
-from blueprints.result import blp as ResultBP
+# IMPORT BLUEPRINTS
+from blueprints.event_entry import blp as ResultBP
 from blueprints.driver import blp as DriverBP
 from blueprints.event import blp as EventBP
 from blueprints.search import blp as SearchBP
 from blueprints.home import blp as HomeBP
 from blueprints.edit_ss import blp as EditSSBP
 from blueprints.add_and_edit_event import blp as AddEditEventBP
+from blueprints.team import blp as TeamBLP
+
 
 app = Flask(__name__)
 Bootstrap5(app)
@@ -41,6 +44,7 @@ app.register_blueprint(SearchBP)
 app.register_blueprint(HomeBP)
 app.register_blueprint(EditSSBP)
 app.register_blueprint(AddEditEventBP)
+app.register_blueprint(TeamBLP)
 
 
 @app.route('/testing')

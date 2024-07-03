@@ -5,8 +5,8 @@ import datetime as dt
 from functions import add_time
 
 
-class ResultModel(db.Model):
-    __tablename__ = 'results'
+class EventEntryModel(db.Model):
+    __tablename__ = 'event_entries'
 
     id = db.Column(db.Integer, primary_key=True)
     start_number = db.Column(db.Integer, nullable=True)
@@ -14,14 +14,18 @@ class ResultModel(db.Model):
 
     # MtO w/ event
     event_id = db.Column(db.Integer, db.ForeignKey("events.id"), unique=False, nullable=False)
-    event = db.relationship("EventModel", back_populates="results")
+    event = db.relationship("EventModel", back_populates="event_entries")
 
     # MtO w/ driver
     driver_id = db.Column(db.Integer, db.ForeignKey("drivers.id"), unique=False, nullable=False)
-    driver = db.relationship("DriverModel", back_populates="results")
+    driver = db.relationship("DriverModel", back_populates="event_entries")
 
     # OtM w/ ss
-    special_sections = db.relationship("SSModel", back_populates="result")
+    special_sections = db.relationship("SSModel", back_populates="event_entry")
+
+    # MtO w/ team
+    team_id = db.Column(db.Integer, db.ForeignKey("teams.id"), unique=False, nullable=False)
+    team = db.relationship("TeamModel", back_populates="event_entries")
 
     @property
     def event_name(self):

@@ -16,13 +16,13 @@ class EventModel(db.Model):
     location = db.Column(db.String(250), nullable=False)
     surface = db.Column(db.String(250), nullable=False)
     distance = db.Column(db.Float, nullable=True)
-    ss_num = db.Column(db.Integer, nullable=False)
+    ss_total = db.Column(db.Integer, nullable=False)
 
     # MtM w/ drivers
     drivers = db.relationship("DriverModel", back_populates="events", secondary="event_driver_link")
 
-    # OtM w/ results
-    results = db.relationship("ResultModel", back_populates="event")
+    # OtM w/ event_entries
+    event_entries = db.relationship("EventEntryModel", back_populates="event")
 
     @property
     def year(self):

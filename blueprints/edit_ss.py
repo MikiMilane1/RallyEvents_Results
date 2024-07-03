@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, request
 from db import db
 import os
-from models import ResultModel, SSModel
+from models import EventEntryModel, SSModel
 from forms import EditSSForm
 import datetime as dt
 
