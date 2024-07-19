@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, request, redirect, url_for
 from db import db
 import os
 from models import EventModel, EventEntryModel, DriverModel, SSModel
-from forms import NewEventForm, RegisterDriverForm
+from forms import NewEventForm, NewDriverForm
 import datetime as dt
 import logging
 
@@ -24,10 +24,11 @@ def create_new_event():
 
     if request.method == "POST":
         form.validate_on_submit()
+        logging.warning(msg=f"printing form data: {type(form.data)}")
 
         # ADD EVENT TO DB
-        event_data = {k: v for k, v in form.data.items() if k != "submit" and k != "csrf_token"}
-        new_event = EventModel(**event_data)
+        new_event = EventModel()
+        form.populate_obj(new_event)
         db.session.add(new_event)
         db.session.commit()
 

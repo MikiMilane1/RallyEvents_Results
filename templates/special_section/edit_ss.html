@@ -1,13 +1,14 @@
-{% extends 'base.html' %}
+{% extends 'base_and_header/base.html' %}
 {% from "bootstrap5/form.html" import render_form %}
 
 {% block title %}
-Edit result for {{ ss.result.event.name }}
+Edit result for {{ ss.event_entry.event.name }}
 {% endblock %}
 
 {% block header %}
-{% include "header.html" %}
+{% include "base_and_header/header.html" %}
 {% endblock %}
+
 {% block content %}
 <div class="container-left border px-5">
     <form method="POST">

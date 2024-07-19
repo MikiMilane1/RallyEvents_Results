@@ -6,7 +6,7 @@ from forms import EditSSForm
 import datetime as dt
 
 APP_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-TEMPLATE_PATH = os.path.join(APP_PATH, "templates")
+TEMPLATE_PATH = os.path.join(APP_PATH, "templates", "special_section")
 
 blp = Blueprint("edit_ss", __name__, template_folder=TEMPLATE_PATH)
 
@@ -25,6 +25,6 @@ def edit_ss(ss_id):
             microseconds = 1
         current_ss.time = dt.time(minute=form.ss_1_m.data, second=form.ss_1_s.data, microsecond=microseconds)
         db.session.commit()
-        return redirect(url_for('event.event', event_id=current_ss.result.event_id))
+        return redirect(url_for('event.event', event_id=current_ss.event_entry.event_id))
 
     return render_template("edit_ss.html", ss=current_ss, form=form)

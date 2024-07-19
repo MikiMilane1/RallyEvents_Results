@@ -19,6 +19,7 @@ from blueprints.team import blp as TeamBLP
 
 
 app = Flask(__name__)
+app.config["DEBUG"] = True
 Bootstrap5(app)
 
 

@@ -13,7 +13,7 @@
                 <li><a href="{{ url_for('home.index') }}" class="nav-link px-2 text-secondary">Home</a></li>
                 <li><a href="{{ url_for('event.all_events') }}" class="nav-link px-2 text-white">Events</a></li>
                 <li><a href="{{ url_for('driver.all_drivers') }}" class="nav-link px-2 text-white">Drivers</a></li>
-                <li><a href="{{ url_for('driver.all_drivers') }}" class="nav-link px-2 text-white">Teams</a></li>
+                <li><a href="{{ url_for('team.all_teams') }}" class="nav-link px-2 text-white">Teams</a></li>
             </ul>
 
             <form class="col-12 col-lg-auto col-xxl-3 mb-3 mb-lg-0 me-lg-3" method="POST" action="{{ url_for('search.search') }}">

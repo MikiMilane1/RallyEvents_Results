@@ -64,7 +64,7 @@ Event: {{ event.name }}
         </li>
 
         <!-- RENDER SPECIAL SECTIONS TABS -->
-        {% for n in range(1, event.ss_num+1) %}
+        {% for n in range(1, event.ss_total+1) %}
         <li class="nav-item" role="presentation">
             <button class="nav-link" id="ss{{n}}-tab" data-bs-toggle="tab" data-bs-target="#ss{{n}}" type="button"
                     role="tab" aria-controls="ss{{n}}" aria-selected="false">SS {{n}}
@@ -88,7 +88,7 @@ Event: {{ event.name }}
         </div>
 
         <!--SS RESULTS TABS-->
-        {% for n in range(1, event.ss_num+1) %}
+        {% for n in range(1, event.ss_total+1) %}
         <div class="tab-pane fade" id="ss{{n}}" role="tabpanel" aria-labelledby="ss{{n}}-tab">
             {% set results = ss_dict["ss_" ~ n] %}
             {% set final_results = ss_dict['final'] %}

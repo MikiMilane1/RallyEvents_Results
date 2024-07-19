@@ -8,6 +8,7 @@ class TeamModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30), nullable=False)
+    country = db.Column(db.String(30), nullable=False)
 
     # OtM w/ event entries
     event_entries = db.relationship("EventEntryModel", back_populates="team")

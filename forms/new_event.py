@@ -23,7 +23,7 @@ class NewEventForm(FlaskForm):
     country = SelectField(label="Country:", validators=[DataRequired()])
     location = StringField(label="Location:", validators=[DataRequired()])
     surface = SelectField(label="Surface:", choices=['gravel', 'asphalt'])
-    ss_num = IntegerField(label="Number of special sections:")
+    ss_total = IntegerField(label="Number of special sections:")
     distance = FloatField(label="Distance:", validators=[DataRequired()])
 
     submit = SubmitField(label='Create new event entry')

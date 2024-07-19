@@ -1,3 +1,5 @@
+import logging
+
 from flask import Blueprint, render_template, request, redirect, url_for
 from db import db
 import os
@@ -20,17 +22,14 @@ def all_drivers():
 
 @blp.route('/add_driver', methods=["POST", "GET"])
 def add_new_driver():
-    form = NewDriverForm(formdata=MultiDict({'firstname': 'Foo'}))
+    form = NewDriverForm()
 
     if request.method == "POST":
         form.validate_on_submit()
 
         # ADD DRIVER TO DB
-        new_driver = DriverModel(
-            first_name=form.firstname.data,
-            last_name=form.lastname.data,
-            birth_date=form.birth_date.data,
-            country=form.country.data)
+        new_driver = DriverModel()
+        form.populate_obj(new_driver)
         try:
             db.session.add(new_driver)
             db.session.commit()
@@ -57,25 +56,16 @@ def edit_driver(driver_id):
     form = NewDriverForm()
 
     if request.method == 'GET':
-        form.firstname.data = driver.first_name
-        form.lastname.data = driver.last_name
-        form.country.data = driver.country
-        form.birth_date.data = driver.birth_date
-        form.submit.label.text = 'Submit edit'
+        form = NewDriverForm(obj=driver)
+        form.submit.label.text = 'Submit edits'
 
-    if request.method == "POST":
-        form.validate_on_submit()
-        print(form.data)
-
-        driver.first_name = form.firstname.data
-        driver.last_name = form.lastname.data
-        driver.country = form.country.data
-        driver.birth_date = form.birth_date.data
+    if request.method == "POST" and form.validate_on_submit():
+        form.populate_obj(driver)
         db.session.add(driver)
         db.session.commit()
         return redirect(url_for('driver.driver', driver_id=driver_id))
 
-    return render_template('edit_driver.html', form=form)
+    return render_template('edit_driver.html', form=form, driver=driver)
 
 
 # REMOVE DRIVER FROM EVENT
