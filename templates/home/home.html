@@ -9,12 +9,15 @@ Home
 {% endblock %}
 
 {% block content %}
+
 <div class="container py-5">
+
+    <!-- LIVE EVENTS SECTION -->
     <div class="row col-xxl-12">
 
         <h3>Live Events</h3>
 
-        {% if live_events!=[] %}
+        {% if live_events != [] %}
 
         <table class="table">
             <thead>
@@ -24,35 +27,54 @@ Home
                 <th scope="col">Date to</th>
             </tr>
             </thead>
-            {% for item in live_events: %}
+            <tbody>
+            {% for event in live_events %}
             <tr>
-                {% if item.series_instance == None %}
-                <td><a href="{{ url_for('event.event', event_id=item.id) }}">{{ item.name }} {{
-                    item.year }}</a></td>
+                {% if event.series_instance == None %}
+                <td>
+                    <a href="{{ url_for('event.event', event_id=event.id) }}">{{ event.name }} {{ event.year }}</a>
+                </td>
                 {% else %}
-                <td><a href="{{ url_for('event', event_id=item.id) }}">{{ item.series_instance }}. {{ item.name }} {{
-                    item.year }}</a></td>
+                <td>
+                    <a href="{{ url_for('event.event', event_id=event.id) }}">{{ event.series_instance }}. {{ event.name }} {{ event.year }}</a>
+                </td>
                 {% endif %}
-                <td>{{ item.date_from }}</td>
-                <td>{{ item.date_to }}</td>
-
+                <td>{{ event.date_from }}</td> <!-- Add date_from here -->
+                <td>{{ event.date_to }}</td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <!-- Nested Table -->
+                    <table class="table table-sm nested-table">
+                        <tbody>
+                        {% for entry in event.event_entries %}
+                        <tr>
+                            <td>{{ entry.driver.full_name }}</td>
+                            <td>{{ entry.car }}</td>
+                            <td>{{ entry.team.name }}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </td>
             </tr>
             {% endfor %}
-
+            </tbody>
         </table>
 
         {% else %}
 
-        <div class="p-5" style="color: red">No live events</div>
+        <div class="p-5">No live events</div>
 
         {% endif %}
     </div>
 
+    <!-- UPCOMING EVENTS SECTION -->
     <div class="row col-xxl-12 py-5">
 
         <h3>Upcoming Events</h3>
 
-        {% if upcoming_events!=[] %}
+        {% if upcoming_events != [] %}
 
         <table class="table">
             <thead>
@@ -62,26 +84,24 @@ Home
                 <th scope="col">Date to</th>
             </tr>
             </thead>
-            {% for item in upcoming_events: %}
+            <tbody>
+            {% for item in upcoming_events %}
             <tr>
                 {% if item.series_instance == None %}
-                <td><a href="{{ url_for('event.event', event_id=item.id) }}">{{ item.name }} {{
-                    item.year }}</a></td>
+                <td><a href="{{ url_for('event.event', event_id=item.id) }}">{{ item.name }} {{ item.year }}</a></td>
                 {% else %}
-                <td><a href="{{ url_for('event', event_id=item.id) }}">{{ item.series_instance }}. {{ item.name }} {{
-                    item.year }}</a></td>
+                <td><a href="{{ url_for('event.event', event_id=item.id) }}">{{ item.series_instance }}. {{ item.name }} {{ item.year }}</a></td>
                 {% endif %}
                 <td>{{ item.date_from }}</td>
                 <td>{{ item.date_to }}</td>
-
             </tr>
             {% endfor %}
-
+            </tbody>
         </table>
 
         {% else %}
 
-        <div class="p-5" style="color: red">No upcoming events</div>
+        <div class="p-5 warning">No upcoming events</div>
 
         {% endif %}
     </div>

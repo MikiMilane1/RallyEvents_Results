@@ -1,29 +1,22 @@
-
 .btn-primary {
---bs-btn-bg: rgb(33 37 41);
-text-decoration: none;
+    --bs-btn-bg: rgb(33, 37, 41); /* Fixed color syntax */
+    text-decoration: none;
 }
 
 .custom_button {
---bs-btn-bg: rgb(33 37 41);
---bs-btn-color: #fff;
-text-decoration: none;
+    --bs-btn-bg: rgb(33, 37, 41); /* Fixed color syntax */
+    --bs-btn-color: #fff;
+    text-decoration: none;
 }
 
 .button {
-  text-decoration: none;
+    text-decoration: none;
 }
 
 #custom_button {
+    /* Add specific styles here if needed */
 }
 
-a:hover {
- text-decoration: none;
-}
-
-a {
-    color: r#fff));
-    text-decoration: none;
 
 #myform {
     display: flex;
@@ -36,5 +29,15 @@ a {
 
 .form-row .form-group {
     display: inline-block;
-    margin-right: 15px;  /* Adjust spacing between fields */
+    margin-right: 15px; /* Adjust spacing between fields */
 }
+
+/* INDENTATION FOR NESTED TABLES */
+.nested-table {
+    margin-left: 80px;
+}
+
+.warning {
+    color: red;
+}
+

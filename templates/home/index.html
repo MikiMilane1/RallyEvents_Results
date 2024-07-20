@@ -9,49 +9,86 @@ Home
 {% endblock %}
 
 {% block content %}
-{% if showcase_events|length < 3 %}
-No existing eventsssss
-{% else %}
-<div class="album py-5 bg-body-tertiary">
-    <div class="container">
 
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-            <div class="col">
-                <div class="card shadow-sm">
-                    <title>Placeholder</title><img src="../static/assets/img/example_img1.jpg" height="235.95"/>
-                    <div class="card-body">
-                        <p class="card-text"><a href="{{ url_for('event', event_id=showcase_events[0].id) }}">{{
-                            showcase_events[0].name }}</a></p>
-                        <div class="d-flex justify-content-between align-items-center">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card shadow-sm">
-                    <title>Placeholder</title><img src="../static/assets/img/example_img2.jpeg" height="235.95"/>
-                    <div class="card-body">
-                        <p class="card-text"><a href="{{ url_for('event', event_id=showcase_events[1].id) }}">{{
-                            showcase_events[1].name }}</a></p>
-                        <div class="d-flex justify-content-between align-items-center">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card shadow-sm">
-                    <title>Placeholder</title><img src="../static/assets/img/example_img3.jpg" height="235.95"/>
-                    <div class="card-body">
-                        <p class="card-text"><a href="{{ url_for('event', event_id=showcase_events[2].id) }}">{{
-                            showcase_events[2].name }}</a></p>
-                        <div class="d-flex justify-content-between align-items-center">
-                        </div>
-                    </div>
-                </div>
-            </div>
+<div class="container py-5">
 
-        </div>
+<!--    LIVE EVENTS SECTION-->
+    <div class="row col-xxl-12">
+
+        <h3>Live Events</h3>
+
+        {% if live_events!=[] %}
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Event name</th>
+                <th scope="col">Date from</th>
+                <th scope="col">Date to</th>
+            </tr>
+            </thead>
+            {% for item in live_events: %}
+            <tr>
+                {% if item.series_instance == None %}
+                <td><a href="{{ url_for('event.event', event_id=item.id) }}">{{ item.name }} {{
+                    item.year }}</a></td>
+                {% else %}
+                <td><a href="{{ url_for('event', event_id=item.id) }}">{{ item.series_instance }}. {{ item.name }} {{
+                    item.year }}</a></td>
+                {% endif %}
+                <td>{{ item.date_from }}</td>
+                <td>{{ item.date_to }}</td>
+
+            </tr>
+            {% endfor %}
+
+        </table>
+
+        {% else %}
+
+        <div class="p-5" style="color: red">No live events</div>
+
+        {% endif %}
+    </div>
+
+
+<!--UPCOMING EVENTS SECTION-->
+    <div class="row col-xxl-12 py-5">
+
+        <h3>Upcoming Events</h3>
+
+        {% if upcoming_events!=[] %}
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Event name</th>
+                <th scope="col">Date from</th>
+                <th scope="col">Date to</th>
+            </tr>
+            </thead>
+            {% for item in upcoming_events: %}
+            <tr>
+                {% if item.series_instance == None %}
+                <td><a href="{{ url_for('event.event', event_id=item.id) }}">{{ item.name }} {{
+                    item.year }}</a></td>
+                {% else %}
+                <td><a href="{{ url_for('event', event_id=item.id) }}">{{ item.series_instance }}. {{ item.name }} {{
+                    item.year }}</a></td>
+                {% endif %}
+                <td>{{ item.date_from }}</td>
+                <td>{{ item.date_to }}</td>
+
+            </tr>
+            {% endfor %}
+
+        </table>
+
+        {% else %}
+
+        <div class="p-5" style="color: red">No upcoming events</div>
+
+        {% endif %}
     </div>
 </div>
-{% endif %}
 {% endblock %}
