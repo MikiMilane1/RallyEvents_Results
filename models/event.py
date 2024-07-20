@@ -1,5 +1,5 @@
 from db import db
-
+import datetime
 
 class EventModel(db.Model):
     __tablename__ = "events"
@@ -27,3 +27,12 @@ class EventModel(db.Model):
     @property
     def year(self):
         return self.date_from.year
+
+    @property
+    def status(self):
+        today = datetime.datetime.now()
+        if self.date_from < today.date() < self.date_to:
+            return 'live'
+        elif self.date_from > today.date():
+            return 'upcoming'
+

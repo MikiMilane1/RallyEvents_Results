@@ -17,6 +17,7 @@ Events
         <table class="table">
             <thead>
             <tr>
+                <th scope="col">Event ID</th>
                 <th scope="col">Event name</th>
                 <th scope="col">Date from</th>
                 <th scope="col">Date to</th>
@@ -25,6 +26,7 @@ Events
             </thead>
             {% for item in all_events: %}
             <tr>
+                <td>{{ item.id }}</td>
                 {% if item.series_instance == None %}
                 <td><a href="{{ url_for('event.event', event_id=item.id) }}">{{ item.name }} {{
                     item.year }}</a></td>
