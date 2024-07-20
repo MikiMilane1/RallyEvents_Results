@@ -92,6 +92,7 @@ Event: {{ event.name }}
         <div class="tab-pane fade" id="ss{{n}}" role="tabpanel" aria-labelledby="ss{{n}}-tab">
             {% set results = ss_dict["ss_" ~ n] %}
             {% set final_results = ss_dict['final'] %}
+            {% set afters = ss_dict["ss_" ~ n ~ "_after"] %}
             {% include "special_section/special_section.html" %}
         </div>
         {% endfor %}

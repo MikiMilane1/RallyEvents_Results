@@ -33,13 +33,13 @@
                     <th scope="col">Final</th>
 
                 </tr>
-                {% for result in final_results %}
+                {% for result in afters %}
                 <tr>
                     <td scope="col">{{result.start_number}}</td>
                     <td scope="col">{{result.driver_name}}</td>
                     <td scope="col">{{result.driver.country}}</td>
                     <td scope="col">{{result.car}}</td>
-                    <td scope="col">{{result.finish_time}}</td>
+                    <td scope="col">{{result.afters[n-1]}}</td>
 
                 </tr>
                 {% endfor %}

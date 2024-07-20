@@ -40,6 +40,7 @@ def event(event_id):
     # SORT EVENT ENTRIES BY FINISH TIME
     event_entries_list = [item for item in current_event.event_entries]
     event_entries_list_sorted = sorted(event_entries_list, key=lambda x: x.finish_time, reverse=False)
+    event_entries_list_sorted2 = sorted(event_entries_list, key=lambda x: x.finish_time, reverse=False)
 
     # SORT EVENT ENTRIES BY SPECIAL SECTIONS
     ss_dict = {'final': event_entries_list_sorted}
@@ -50,6 +51,11 @@ def event(event_id):
         ).order_by(SSModel.time.asc()).all()
         logging.warning(msg=ss_sorted)
         ss_dict[f"ss_{n}"] = [item.event_entry for item in ss_sorted]
+
+        afters_sorted = sorted(event_entries_list, key=lambda x: x.afters[n - 1], reverse=False)
+
+        ss_dict[f"ss_{n}_after"] = afters_sorted
+
     logging.warning(msg=f"ssdict is {ss_dict}")
 
     if request.method == "POST" and new_entry_form.validate_on_submit():
@@ -64,12 +70,6 @@ def event(event_id):
         db.session.commit()
 
         # CREATE EVENT_ENTRY
-        # new_event_entry = EventEntryModel(
-        #     start_number=new_entry_form.start_number.data,
-        #     car=new_entry_form.car.data,
-        #     event_id=current_event.id,
-        #     driver_id=selected_driver.id,
-        # )
         new_event_entry = EventEntryModel(
             start_number=new_entry_form.start_number.data,
             car=new_entry_form.car.data,
@@ -94,7 +94,6 @@ def event(event_id):
 
         return redirect(url_for('event.event', event_id=current_event.id))
 
-    print(f'drivers for this events are {current_event.drivers}')
     return render_template('event.html',
                            event=current_event,
                            register_driver_form=new_entry_form,
