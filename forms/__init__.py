@@ -5,3 +5,4 @@ from forms.create_event_entry import NewEventEntryForm
 from forms.ss_num import EditSSForm
 from forms.login import LoginForm
 from forms.new_team import NewTeamForm
+from forms.register_and_login import NewUserForm

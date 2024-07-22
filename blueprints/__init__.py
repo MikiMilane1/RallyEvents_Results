@@ -1,0 +1,9 @@
+from blueprints.add_and_edit_event import blp as AddEditEventBP
+from blueprints.event_entry import blp as EventEntryBP
+from blueprints.event import blp as EventBP
+from blueprints.search import blp as SearchBP
+from blueprints.home import blp as HomeBP
+from blueprints.edit_ss import blp as EditSSBP
+from blueprints.team import blp as TeamBP
+from blueprints.user import blp as UserBP
+from blueprints.driver import blp as DriverBP
