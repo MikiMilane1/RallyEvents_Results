@@ -41,18 +41,23 @@ def login():
     if request.method == "POST" and form.validate_on_submit():
         user = UserModel.query.filter(UserModel.username == form.username.data).first()
         if user:
-            pass
+            if pbkdf2_sha256.verify(form.password.data, user.password_hash):
+                login_user(user)
+                return render_template('dashboard.html', user=user)
 
     form.submit.label.text = 'Login'
     return render_template('login.html', form=form)
 
 
 @blp.route("/logout", methods=["POST", "GET"])
+@login_required
 def logout():
+    logout_user()
     return 'Successfully logged out.'
 
 
 @blp.route("/dashboard/<int:user_id>")
+@login_required
 def dashboard(user_id):
     user = db.get_or_404(UserModel, user_id)
     return render_template('dashboard.html', user=user)
